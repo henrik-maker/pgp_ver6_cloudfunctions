@@ -1,0 +1,29 @@
+{
+  "MessageHeader": {
+    "MessageClass": "SERVICE",
+    "MessageCategory": "PAYMENT",
+    "MessageType": "REQUEST",
+    "ServiceID": "1234",
+    "SaleID": "DanielVerifone",
+    "POIID": "713-624-211"
+  },
+  "PaymentRequest": {
+    "SaleData": {
+      "OperatorID": "440010051",
+      "SaleTransactionID": {
+        "TransactionID": "112233",
+        "TimeStamp": "2026-01-21T13:07:09Z"
+      }
+    },
+    "PaymentTransaction": {
+      "AmountsReq": {
+        "Currency": "SEK",
+        "RequestedAmount": "88.0"
+      }
+    },
+    "PaymentData": {
+      "PaymentType": "NORMAL",
+      "SplitPaymentFlag": false
+    }
+  }
+}
