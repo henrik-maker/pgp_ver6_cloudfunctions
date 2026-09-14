@@ -1,5 +1,6 @@
 /**
  * Firebase Functions (2nd gen) - POSCloud proxy
+ * Firebase cloud functions to communicate with Verifone cloud functions
  */
 
 const {defineSecret} = require("firebase-functions/params");
@@ -11,8 +12,9 @@ const PGP_API_KEY = defineSecret("PGP_API_KEY");
 const POSCLOUD_BASIC_AUTH = defineSecret("POSCLOUD_BASIC_AUTH");
 
 setGlobalOptions({
-  region: "us-central1",
+  region: "europe-north1",
   maxInstances: 10,
+  invoker: "public",
 });
 
 function requireEnv(name) {
@@ -38,12 +40,20 @@ function requireAppKey(req) {
   if (!expected) return;
 
   const got = req.header("x-pgp-key");
+
+  logger.info("requireAppKey", {
+    expectedLen: expected.length,
+    gotLen: got ? got.length : 0,
+    match: got === expected,
+  });
+
   if (!got || got !== expected) {
     const err = new Error("Unauthorized");
     err.status = 401;
     throw err;
   }
 }
+
 
 function sendError(res, e) {
   const status = Number(e?.status) || 500;
@@ -211,7 +221,7 @@ async function proxyToPosCloud({
  * Sanity endpoint
  */
 exports.posCloudHealth = onRequest(
-  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH]},
+  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH], cors: true},
   (req, res) => {
     return res.status(200).json({
       ok: true,
@@ -232,7 +242,7 @@ exports.posCloudHealth = onRequest(
  * GET /poscloud/nexo/status
  */
 exports.posCloudStatus = onRequest(
-  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH]},
+  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH], cors: true},
   async (req, res) => {
     try {
       const result = await proxyToPosCloud({
@@ -254,7 +264,7 @@ exports.posCloudStatus = onRequest(
  * POST /poscloud/nexo/payment
  */
 exports.posCloudPayment = onRequest(
-  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH]},
+  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH], cors: true},
   async (req, res) => {
     try {
       const result = await proxyToPosCloud({
@@ -277,7 +287,7 @@ exports.posCloudPayment = onRequest(
  * Refund via payment-payload med PaymentType: REFUND.
  */
 exports.posCloudRefund = onRequest(
-  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH]},
+  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH], cors: true},
   async (req, res) => {
     try {
       const result = await proxyToPosCloud({
@@ -300,7 +310,7 @@ exports.posCloudRefund = onRequest(
  * v1 är deprecated, v2 är verifierad i OpenAPI.  [oai_citation:3‡POSCloud_OpenAPI_3.25.0.json](sediment://file_00000000df8c71f884c80f973f4dd746)
  */
 exports.posCloudReversal = onRequest(
-  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH]},
+  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH], cors: true},
   async (req, res) => {
     try {
       const result = await proxyToPosCloud({
@@ -322,7 +332,7 @@ exports.posCloudReversal = onRequest(
  * POST /poscloud/nexo/abort
  */
 exports.posCloudAbort = onRequest(
-  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH]},
+  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH], cors: true},
   async (req, res) => {
     try {
       const result = await proxyToPosCloud({
@@ -344,7 +354,7 @@ exports.posCloudAbort = onRequest(
  * POST /poscloud/nexo/transactionstatus
  */
 exports.posCloudTransactionStatus = onRequest(
-  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH]},
+  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH], cors: true},
   async (req, res) => {
     try {
       const result = await proxyToPosCloud({
@@ -367,7 +377,7 @@ exports.posCloudTransactionStatus = onRequest(
  * v1 är deprecated, v2 är verifierad i OpenAPI.
  */
 exports.posCloudGetTotals = onRequest(
-  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH]},
+  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH], cors: true},
   async (req, res) => {
     try {
       const result = await proxyToPosCloud({
