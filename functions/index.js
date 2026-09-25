@@ -329,6 +329,28 @@ exports.posCloudReversal = onRequest(
 );
 
 /**
+ * POST /poscloud/nexo/print
+ */
+exports.posCloudPrint = onRequest(
+  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH], cors: true},
+  async (req, res) => {
+    try {
+      const result = await proxyToPosCloud({
+        req,
+        posPath: "/poscloud/nexo/print",
+        method: "POST",
+        entitySiteIdEnv: "POSCLOUD_SITE_ENTITY_ID",
+        timeoutMs: 70000,
+      });
+      return res.status(result.status).json(result);
+    } catch (e) {
+      logger.error("posCloudPrint failed", e);
+      return sendError(res, e);
+    }
+  }
+);
+
+/**
  * POST /poscloud/nexo/abort
  */
 exports.posCloudAbort = onRequest(
