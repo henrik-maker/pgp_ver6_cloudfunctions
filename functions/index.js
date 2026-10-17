@@ -17,6 +17,13 @@ setGlobalOptions({
   invoker: "public",
 });
 
+// Admin SDK behövs bara av MCP-servern (mcp.js, läser Firestore). Måste
+// initieras och require:as EFTER setGlobalOptions så region/invoker-defaults
+// gäller även den funktionen.
+const admin = require("firebase-admin");
+admin.initializeApp();
+exports.mcp = require("./mcp").mcp;
+
 function requireEnv(name) {
   const v = process.env[name];
   if (!v || String(v).trim().length === 0) {
