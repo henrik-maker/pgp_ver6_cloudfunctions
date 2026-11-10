@@ -97,6 +97,7 @@ function extractResponseFields(json) {
     json?.AbortResponse ||
     json?.TransactionStatusResponse ||
     json?.GetTotalsResponse ||
+    json?.ReconciliationResponse ||
     json?.LoginResponse ||
     json?.LogoutResponse ||
     json?.DisplayResponse ||
@@ -419,6 +420,30 @@ exports.posCloudGetTotals = onRequest(
       return res.status(result.status).json(result);
     } catch (e) {
       logger.error("posCloudGetTotals failed", e);
+      return sendError(res, e);
+    }
+  }
+);
+
+/**
+ * POST /poscloud/nexo/reconciliation
+ * Terminalens dagsavslut (Z-rapport): SALERECONCILIATION stänger perioden mot
+ * kassan och nollställer terminalens summor. Appen skickar bara den typen.
+ */
+exports.posCloudReconciliation = onRequest(
+  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH], cors: true},
+  async (req, res) => {
+    try {
+      const result = await proxyToPosCloud({
+        req,
+        posPath: "/poscloud/nexo/reconciliation",
+        method: "POST",
+        entitySiteIdEnv: "POSCLOUD_SITE_ENTITY_ID",
+        timeoutMs: 70000,
+      });
+      return res.status(result.status).json(result);
+    } catch (e) {
+      logger.error("posCloudReconciliation failed", e);
       return sendError(res, e);
     }
   }
