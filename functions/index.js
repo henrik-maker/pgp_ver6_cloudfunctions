@@ -272,7 +272,7 @@ exports.posCloudStatus = onRequest(
  * POST /poscloud/nexo/payment
  */
 exports.posCloudPayment = onRequest(
-  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH], cors: true},
+  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH], cors: true, timeoutSeconds: 320},
   async (req, res) => {
     try {
       const result = await proxyToPosCloud({
@@ -295,7 +295,7 @@ exports.posCloudPayment = onRequest(
  * Refund via payment-payload med PaymentType: REFUND.
  */
 exports.posCloudRefund = onRequest(
-  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH], cors: true},
+  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH], cors: true, timeoutSeconds: 320},
   async (req, res) => {
     try {
       const result = await proxyToPosCloud({
@@ -318,7 +318,7 @@ exports.posCloudRefund = onRequest(
  * v1 är deprecated, v2 är verifierad i OpenAPI.  [oai_citation:3‡POSCloud_OpenAPI_3.25.0.json](sediment://file_00000000df8c71f884c80f973f4dd746)
  */
 exports.posCloudReversal = onRequest(
-  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH], cors: true},
+  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH], cors: true, timeoutSeconds: 130},
   async (req, res) => {
     try {
       const result = await proxyToPosCloud({
@@ -340,7 +340,7 @@ exports.posCloudReversal = onRequest(
  * POST /poscloud/nexo/print
  */
 exports.posCloudPrint = onRequest(
-  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH], cors: true},
+  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH], cors: true, timeoutSeconds: 80},
   async (req, res) => {
     try {
       const result = await proxyToPosCloud({
@@ -362,7 +362,7 @@ exports.posCloudPrint = onRequest(
  * POST /poscloud/nexo/abort
  */
 exports.posCloudAbort = onRequest(
-  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH], cors: true},
+  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH], cors: true, timeoutSeconds: 80},
   async (req, res) => {
     try {
       const result = await proxyToPosCloud({
@@ -384,7 +384,7 @@ exports.posCloudAbort = onRequest(
  * POST /poscloud/nexo/transactionstatus
  */
 exports.posCloudTransactionStatus = onRequest(
-  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH], cors: true},
+  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH], cors: true, timeoutSeconds: 80},
   async (req, res) => {
     try {
       const result = await proxyToPosCloud({
@@ -407,7 +407,7 @@ exports.posCloudTransactionStatus = onRequest(
  * v1 är deprecated, v2 är verifierad i OpenAPI.
  */
 exports.posCloudGetTotals = onRequest(
-  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH], cors: true},
+  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH], cors: true, timeoutSeconds: 80},
   async (req, res) => {
     try {
       const result = await proxyToPosCloud({
@@ -431,7 +431,7 @@ exports.posCloudGetTotals = onRequest(
  * kassan och nollställer terminalens summor. Appen skickar bara den typen.
  */
 exports.posCloudReconciliation = onRequest(
-  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH], cors: true},
+  {secrets: [PGP_API_KEY, POSCLOUD_BASIC_AUTH], cors: true, timeoutSeconds: 80},
   async (req, res) => {
     try {
       const result = await proxyToPosCloud({
