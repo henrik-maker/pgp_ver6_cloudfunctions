@@ -23,6 +23,7 @@ setGlobalOptions({
 const admin = require("firebase-admin");
 admin.initializeApp();
 exports.mcp = require("./mcp").mcp;
+exports.licenseAdmin = require("./license_admin").licenseAdmin;
 
 function requireEnv(name) {
   const v = process.env[name];
